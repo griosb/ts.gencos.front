@@ -1,8 +1,4 @@
 import { Component } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 
 
 interface ListaOpc {
@@ -29,9 +25,7 @@ const ELEMENT_DATA: Infracciones[] = [
 @Component({
   selector: 'app-busqueda-inscritos',
   imports: [
-    MatCardModule,
-    MatSelectModule,
-    MatTableModule,
+
   ],
   templateUrl: './busqueda-inscritos.html',
   styleUrl: './busqueda-inscritos.scss'
@@ -57,5 +51,4 @@ Escuelas: ListaOpc[] = [
   ];
 
    displayedColumns: string[] = ['Escuela', 'Identificacion', 'NombresApellido', 'NroCohorte', 'Estado', 'Acciones'];
- dataSource = new MatTableDataSource(ELEMENT_DATA);
 }

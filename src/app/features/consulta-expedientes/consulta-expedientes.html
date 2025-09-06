@@ -1,9 +1,8 @@
 <!-- <p>consulta-expedientes works!</p> -->
-<mat-card appearance="outlined">
+<!-- <mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title> Consulta de Expedientes</mat-card-title>
-    <!-- <mat-card-subtitle>Herding group</mat-card-subtitle> -->
-     
+
   </mat-card-header>
 
   <mat-card-content>
@@ -24,266 +23,277 @@
   <mat-card-actions>
     <button matButton="outlined">Buscar</button>
   </mat-card-actions>
-</mat-card>
+</mat-card> -->
+
+<div class="container">
+  <label for="lista-desplegables" class="label-desplegable-govco"><strong>Tipo de Documento</strong><span
+      aria-required="true">*</span></label>
+  <div class="desplegable-govco" style="width:255px; height: 40px;" id="lista-desplegables" data-type="basic">
+    <select aria-invalid="false" aria-describedby="alert-id">
+      <option disabled selected>Escoger</option>
+      @for (food of foods; track food) {
+      <option [value]="food.value">{{food.viewValue}}</option>
+      }
+    </select>
+  </div>
+<div class="entradas-de-texto-govco">
+  <label for="input-basico-id"><strong>Número de Documento*</strong></label>
+  <input type="text" id="input-basico-id" placeholder="Ejemplo: Campo de texto"/>
+</div>
+</div>
+
 
 <br>
 
-<th mat-header-cell *matHeaderCellDef class="mat-primary"> Nro. Expediente </th>
-    <td mat-cell *matCellDef="let element"> {{element.NroExpediente}} </td>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-
-  <ng-container matColumnDef="NroExpediente">
-    <th mat-header-cell *matHeaderCellDef> NroExpediente </th>
-    <td mat-cell *matCellDef="let element"> {{element.NroExpediente}} </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="Fecha Infraccion">
-    <th mat-header-cell *matHeaderCellDef> Fecha Infraccion </th>
-    <td mat-cell *matCellDef="let element"> {{element.FechaInfraccion| date:'short'}} </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="Comportamiento">
-    <th mat-header-cell *matHeaderCellDef> Comportamiento </th>
-    <td mat-cell *matCellDef="let element"> {{element.Comportamiento}} </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="Estado">
-    <th mat-header-cell *matHeaderCellDef> Estado </th>
-    <td mat-cell *matCellDef="let element"> {{element.Estado}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="Acciones">
-    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-    <td mat-cell *matCellDef="let element">  <a href="">Ver Medidas</a></td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-
-<label for="lista-desplegables" class="label-desplegable-govco">Etiqueta<span aria-required="true">*</span></label>
-<div class="desplegable-govco" style="width:255px; height: 40px;" id="lista-desplegables" data-type="basic">
-  <select aria-invalid="false" aria-describedby="alert-id">
-    <option disabled selected>Escoger</option>
-    <option value="1">Opción 1</option>
-    <option value="2">Opción 2</option>
-    <option value="3">Opción 3</option>
-    <option value="4">Opción 4</option>
-    <option value="5">Opción 5</option>
-    <option value="6">Opción 6</option>
-  </select>
+<div class="contenedor-tabla">
+  <h4 class="modal-title-tables" id="tableDescBasic">Tabla Básica</h4>
+  <table class="table table-general table-basic" aria-describedby="tableDescBasic">
+    <thead class="encabezado-tabla">
+      <tr>
+        <th scope="col">
+          Nro Expediente
+        </th>
+        <th scope="col">
+          Fecha Infraccion
+        </th>
+        <th scope="col">
+          Comportamiento
+        </th>
+        <th scope="col">
+          Estado
+        </th>
+        <th scope="col">
+          Acciones
+        </th>
+      </tr>
+    </thead>
+    <tbody class="contenido-tablas">
+      @for(infraccion of infracciones;track infraccion) {
+      <tr>
+        <td class="contenido-numerico">
+          {{infraccion.NroExpediente}}
+        </td>
+        <td>
+          {{infraccion.FechaInfraccion | date:'short'}}
+        </td>
+        <td>
+          {{infraccion.Comportamiento}}
+        </td>
+        <td>
+          {{infraccion.Estado}}
+        </td>
+        <td>
+          <a href="">Ver Medidas</a>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 </div>
-<span class="alert-desplegable-govco" id="alert-id">Texto de ayuda</span>
-
-
 
 
 <script>
-  window.addEventListener("load", function() {
+  window.addEventListener("load", function () {
     initDropDown();
-});
+  });
 
-function initDropDown() {
+  function initDropDown() {
     initDropDownBasic();
     document.body.addEventListener('mouseup', mouseUpDropDown.bind(this), true);
-}
+  }
 
-function mouseUpDropDown(e) {
+  function mouseUpDropDown(e) {
     if (!e.target.closest('.checkbox-seleccion-govco')) {
-        if (!e.target.closest('.desplegable-govco')) {
-            closeAllSelect();
-        }
+      if (!e.target.closest('.desplegable-govco')) {
+        closeAllSelect();
+      }
     }
-}
+  }
 
-function closeAllSelect() {
+  function closeAllSelect() {
     const selectsSelecteds = document.querySelectorAll(".desplegable-govco:not(.desplegable-calendar-govco) .desplegable-selected-option:not(.dont-close)");
     if (selectsSelecteds) {
-        selectsSelecteds.forEach(function (e) {
-            if (e.classList.contains("desplegable-arrow-active")) {
-                e.classList.remove("desplegable-arrow-active");
-                e.nextElementSibling.classList.add("desplegable-hide");
+      selectsSelecteds.forEach(function (e) {
+        if (e.classList.contains("desplegable-arrow-active")) {
+          e.classList.remove("desplegable-arrow-active");
+          e.nextElementSibling.classList.add("desplegable-hide");
 
-                if (e.classList.contains('search-filter-selected-option')) {
-                    const selected = e.nextElementSibling.querySelector('.same-as-selected');
-                    if (selected) {
-                        const input = e.querySelector('input');
-                        input.value = selected.innerHTML;
-                    }
-                }
+          if (e.classList.contains('search-filter-selected-option')) {
+            const selected = e.nextElementSibling.querySelector('.same-as-selected');
+            if (selected) {
+              const input = e.querySelector('input');
+              input.value = selected.innerHTML;
             }
-        })
+          }
+        }
+      })
     }
-}
+  }
 
-function handleKeyDownDropDown(e) {
-  let select = this.querySelector('.desplegable-selected-option');
+  function handleKeyDownDropDown(e) {
+    let select = this.querySelector('.desplegable-selected-option');
 
-  if (select.classList.contains('desplegable-arrow-active')) {
+    if (select.classList.contains('desplegable-arrow-active')) {
       if (select.tagName == 'DIV') {
-          select = select.querySelector('input');
+        select = select.querySelector('input');
       }
       const containerItems = this.querySelector(".desplegable-items");
 
-      containerItems.onscroll = function() {
-          const visibleItems = this.querySelectorAll("li");
-          if (document.activeElement == visibleItems[0]) {
-              this.scrollTop = 0;
-          }
+      containerItems.onscroll = function () {
+        const visibleItems = this.querySelectorAll("li");
+        if (document.activeElement == visibleItems[0]) {
+          this.scrollTop = 0;
+        }
       };
       if (e.which == 38) { // Key up
-          upDropDown(this, select);
+        upDropDown(this, select);
       } else if (e.which == 40) { // Key down
-          downDropDown(this, select);
+        downDropDown(this, select);
       } else if (e.which == 9) { // Tab
-          let container = e.target.parentNode;
-          if (select.tagName == 'INPUT') {
-              container = container.parentNode;
-          }
-          closedDropDown(container);
+        let container = e.target.parentNode;
+        if (select.tagName == 'INPUT') {
+          container = container.parentNode;
+        }
+        closedDropDown(container);
       }
+    }
   }
-}
 
-function closedDropDown(containerSelect) {
-  const containerOptions = containerSelect.querySelector('.desplegable-items');
-  const selectActive = containerSelect.querySelector('.desplegable-selected-option.desplegable-arrow-active');
-  if (selectActive) {
+  function closedDropDown(containerSelect) {
+    const containerOptions = containerSelect.querySelector('.desplegable-items');
+    const selectActive = containerSelect.querySelector('.desplegable-selected-option.desplegable-arrow-active');
+    if (selectActive) {
       selectActive.classList.remove('desplegable-arrow-active');
       containerOptions.classList.add('desplegable-hide');
-  }
+    }
 
-  if (containerSelect.classList.contains('desplegable-filter-govco')) {
+    if (containerSelect.classList.contains('desplegable-filter-govco')) {
       const selected = containerSelect.querySelector('.same-as-selected');
       if (selected) {
-          const input = containerSelect.querySelector('.desplegable-selected-option input');
-          input.value = selected.innerHTML;
+        const input = containerSelect.querySelector('.desplegable-selected-option input');
+        input.value = selected.innerHTML;
       }
+    }
   }
-}
 
-function upDropDown(container, select) {
-  const active = document.activeElement;
-  const itemsList = container.querySelectorAll(".desplegable-items li:not(.none-desplegable-govco)");
-  if (active === itemsList[0]) {
+  function upDropDown(container, select) {
+    const active = document.activeElement;
+    const itemsList = container.querySelectorAll(".desplegable-items li:not(.none-desplegable-govco)");
+    if (active === itemsList[0]) {
       select.focus();
-  } else {
+    } else {
       for (let i = 1; i < itemsList.length; i++) {
-          if (active === itemsList[i]) {
-              itemsList[i - 1].focus();
-          }
+        if (active === itemsList[i]) {
+          itemsList[i - 1].focus();
+        }
       }
+    }
   }
-}
 
-function downDropDown(container, select) {
-  let active = document.activeElement;
-  const items = container.querySelectorAll(".desplegable-items li:not(.none-desplegable-govco)");
-  const itemSelected = container.querySelector(".desplegable-items li.same-as-selected");
+  function downDropDown(container, select) {
+    let active = document.activeElement;
+    const items = container.querySelectorAll(".desplegable-items li:not(.none-desplegable-govco)");
+    const itemSelected = container.querySelector(".desplegable-items li.same-as-selected");
 
-  if (itemSelected && active === select) {
+    if (itemSelected && active === select) {
       itemSelected.focus();
-  } else if (active === select) {
+    } else if (active === select) {
       items[0].focus();
-  } else {
+    } else {
       for (let i = 0; i < items.length - 1; i++) {
-          if (active === items[i]) {
-              items[i + 1].focus();
-          }
+        if (active === items[i]) {
+          items[i + 1].focus();
+        }
       }
+    }
   }
-}
 
-function handleKeyDownOptionDropDown(e) {
-  if (e.which == 13) { // Enter
+  function handleKeyDownOptionDropDown(e) {
+    if (e.which == 13) { // Enter
       enterOptionDropDown(e.target);
-  } else if (e.which == 9) { // Tab
+    } else if (e.which == 9) { // Tab
       const containerSelect = e.target.parentNode.parentNode;
       closedDropDown(containerSelect);
+    }
   }
-}
 
-function enterOptionDropDown(element) {
-  const containerOptions = element.parentNode;
-  const containerSelect = containerOptions.parentNode;
-  let select = containerSelect.querySelector('.desplegable-selected-option');
-  let inputHidden = containerSelect.querySelector('input[type="hidden"');
-  const item = containerOptions.querySelector('li.same-as-selected');
-  if (item) {
+  function enterOptionDropDown(element) {
+    const containerOptions = element.parentNode;
+    const containerSelect = containerOptions.parentNode;
+    let select = containerSelect.querySelector('.desplegable-selected-option');
+    let inputHidden = containerSelect.querySelector('input[type="hidden"');
+    const item = containerOptions.querySelector('li.same-as-selected');
+    if (item) {
       item.classList.remove('same-as-selected');
       if (item.classList.length == 0) {
-          item.removeAttribute("class");
+        item.removeAttribute("class");
       }
-  }
-  if (select.tagName == 'DIV') {
+    }
+    if (select.tagName == 'DIV') {
       const clearIcon = select.querySelector(".btn-clear-desplegable-govco");
       clearIcon.classList.remove("d-none");
 
       select = select.querySelector('input');
       select.value = element.innerHTML;
-  } else {
+    } else {
       select.innerHTML = element.innerHTML;
+    }
+    inputHidden.value = element.getAttribute('value');
+    element.classList.add('same-as-selected');
+    closedDropDown(containerSelect);
   }
-  inputHidden.value = element.getAttribute('value');
-  element.classList.add('same-as-selected');
-  closedDropDown(containerSelect);
-}
 
-function toggleSelect(elmnt) {
-  if (elmnt) {
+  function toggleSelect(elmnt) {
+    if (elmnt) {
       elmnt.nextElementSibling.classList.toggle("desplegable-hide");
       elmnt.classList.toggle("desplegable-arrow-active");
+    }
   }
-}
 
-function createInputHidden(selectTag, valueSelected) {
-  let inputHidden = document.createElement("input");
-  inputHidden.setAttribute('type', 'hidden');
-  inputHidden.value = valueSelected;
-  if (selectTag.attributes.length > 0) {
+  function createInputHidden(selectTag, valueSelected) {
+    let inputHidden = document.createElement("input");
+    inputHidden.setAttribute('type', 'hidden');
+    inputHidden.value = valueSelected;
+    if (selectTag.attributes.length > 0) {
       for (const attribute of selectTag.attributes) {
-          if (attribute.name == 'class') {
-              inputHidden.classList.add(attribute.value);
-          } else {
-              inputHidden.setAttribute(attribute.name, attribute.value);
-          }
+        if (attribute.name == 'class') {
+          inputHidden.classList.add(attribute.value);
+        } else {
+          inputHidden.setAttribute(attribute.name, attribute.value);
+        }
       }
+    }
+    return inputHidden;
   }
-  return inputHidden;
-}
 
-function initDropDownBasic() {
-  const containerDesplegables = document.querySelectorAll('.desplegable-govco[data-type="basic"]');
-  for (const containerDesplegable of containerDesplegables) {
+  function initDropDownBasic() {
+    const containerDesplegables = document.querySelectorAll('.desplegable-govco[data-type="basic"]');
+    for (const containerDesplegable of containerDesplegables) {
       createList(containerDesplegable.id);
+    }
   }
-}
 
-function createList(idSelectElement) {
-  let options;
-  const select = document.getElementById(idSelectElement);
-  if (select == undefined || select == null) {
+  function createList(idSelectElement) {
+    let options;
+    const select = document.getElementById(idSelectElement);
+    if (select == undefined || select == null) {
       return false;
-  }
-  const selectTag = select.querySelector("select");
-  // Se crea estructura de listado seleccionable
-  let selectSelected = createButtonList(selectTag);
-  if (selectTag.disabled) {
+    }
+    const selectTag = select.querySelector("select");
+    // Se crea estructura de listado seleccionable
+    let selectSelected = createButtonList(selectTag);
+    if (selectTag.disabled) {
       selectSelected.disabled = true;
       const label = select.previousElementSibling;
       label.classList.add('disabled-desplegable-govco');
-  }
-  select.appendChild(selectSelected);
+    }
+    select.appendChild(selectSelected);
 
-  let selectItems = document.createElement("ul");
-  selectItems.setAttribute("class", "desplegable-items desplegable-hide");
-  const valueSelected = selectTag.options[selectTag.selectedIndex].getAttribute('value') ? selectTag.options[selectTag.selectedIndex].getAttribute('value') : '';
+    let selectItems = document.createElement("ul");
+    selectItems.setAttribute("class", "desplegable-items desplegable-hide");
+    const valueSelected = selectTag.options[selectTag.selectedIndex].getAttribute('value') ? selectTag.options[selectTag.selectedIndex].getAttribute('value') : '';
 
-  for (let j = 1; j < selectTag.length; j++) {
+    for (let j = 1; j < selectTag.length; j++) {
       // Se construyen opciones de selección
       options = document.createElement("li");
       options.innerHTML = selectTag.options[j].innerHTML;
@@ -291,36 +301,36 @@ function createList(idSelectElement) {
       options.setAttribute("tabindex", "-1");
 
       if (valueSelected > 0 && selectTag.options[j].getAttribute('value') == valueSelected) {
-          options.classList.add('same-as-selected');
+        options.classList.add('same-as-selected');
       }
 
       options.addEventListener("click", function (e) {
-          enterOptionDropDown(e.target);
+        enterOptionDropDown(e.target);
       });
       options.addEventListener('keydown', handleKeyDownOptionDropDown);
       selectItems.appendChild(options);
+    }
+    select.appendChild(selectItems);
+    select.addEventListener('keydown', handleKeyDownDropDown);
+
+    let inputHidden = createInputHidden(selectTag, valueSelected);
+    select.appendChild(inputHidden);
+
+    select.removeChild(selectTag);
   }
-  select.appendChild(selectItems);
-  select.addEventListener('keydown', handleKeyDownDropDown);
 
-  let inputHidden = createInputHidden(selectTag, valueSelected);
-  select.appendChild(inputHidden);
-
-  select.removeChild(selectTag);
-}
-
-function createButtonList(selectTag) {
-  let selectSelected = document.createElement("button");
-  selectSelected.setAttribute("class", "desplegable-selected-option");
-  selectSelected.innerHTML = selectTag.options[selectTag.selectedIndex].innerHTML;
-  if (selectTag.getAttribute('aria-invalid') == 'true') {
+  function createButtonList(selectTag) {
+    let selectSelected = document.createElement("button");
+    selectSelected.setAttribute("class", "desplegable-selected-option");
+    selectSelected.innerHTML = selectTag.options[selectTag.selectedIndex].innerHTML;
+    if (selectTag.getAttribute('aria-invalid') == 'true') {
       selectSelected.classList.add('error-desplegable-govco');
-  }
-  selectSelected.addEventListener("click", function (e) {
+    }
+    selectSelected.addEventListener("click", function (e) {
       e.stopPropagation();
       toggleSelect(this);
-  });
+    });
 
-  return selectSelected;
-}
+    return selectSelected;
+  }
 </script>

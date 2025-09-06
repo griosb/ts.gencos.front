@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+
 
 
 export interface Infracciones {
@@ -36,14 +31,7 @@ interface ListaOpc {
   selector: 'app-cursos-inscritos',
 imports: [
     CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
+ 
     FormsModule
   ],
   templateUrl: './cursos-inscritos.html',
@@ -71,6 +59,6 @@ export class CursosInscritos {
     {value: 'PPT', viewValue: 'Tecnico Profesioanl 3'},
   ];
  displayedColumns: string[] = ['Escuela', 'NivelAcademico', 'NombrePrograma', 'NroCohorte', 'Estado'];
- dataSource = new MatTableDataSource(ELEMENT_DATA);
+//  dataSource = new MatTableDataSource(ELEMENT_DATA);
 
 }
