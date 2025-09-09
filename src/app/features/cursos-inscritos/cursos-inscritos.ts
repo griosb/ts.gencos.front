@@ -35,7 +35,8 @@ imports: [
     FormsModule
   ],
   templateUrl: './cursos-inscritos.html',
-  styleUrl: './cursos-inscritos.scss'
+  styleUrl: './cursos-inscritos.scss',
+  standalone: true,
 })
 
 
