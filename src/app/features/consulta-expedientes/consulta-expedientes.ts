@@ -10,9 +10,21 @@ import { ToastService } from '../../toast.service';
 import { NgxSpinnerModule } from 'ngx-spinner'; // Import NgxSpinnerModule
 import { BrowserModule } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { evaluacion } from '../../core/models/evaluacionDTO';
+import { evaluacion, Medida } from '../../core/models/evaluacionDTO';
 import { NavbarComponent } from "../../component/navbar/navbar.component";
 
+import { Dialog } from '@angular/cdk/dialog';
+import { ListaMedidasComponent} from "../lista-medidas/lista-medidas.component";
+import {MatButtonModule} from '@angular/material/button';
+import { SharedService } from '../../shared/services/shared.service';
+
+import {ThemePalette} from '@angular/material/core';
+import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { finalize } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+import { AlertDialogComponent } from '../../shared/alert-dialog/alert-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -34,11 +46,10 @@ interface Select {
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
-    //BrowserAnimationsModule, // Required for ngx-spinner animations
-    // NgxSpinnerModule.forRoot({ type: 'ball-spin-clockwise-fade-rotating' })
-    ,
-    NavbarComponent
+    ReactiveFormsModule,
+    MatButtonModule,
+    NavbarComponent,
+    MatProgressBarModule
 ],
   
   templateUrl: './consulta-expedientes.html',
@@ -50,34 +61,55 @@ interface Select {
 })
 
 export class ConsultaExpedientes implements OnInit{
+  loading: boolean = false;
+
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
+  value = 50;
+  strokeWidth = 4;
 
    TiposDocumentos: Select[] = [
     {value: 'CC', viewValue: 'Cedula de Ciudadania'},
     {value: 'CE' , viewValue: 'Cedula de Extranjeria'},
   ];
 
+  // private dialog = inject(Dialog);
+
 
   numeroDocumento:string='';
-  posts = signal<evaluacion[]>([]);
+  posts = signal<evaluacion[] | undefined>(undefined);
 
   private apiUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 //  http = inject(HttpClient);
 //   userList: any[] = [];
 
+  protected openModal(medidas:evaluacion){
+    this.shared.setinfo(medidas)
+    this.dialog.open(ListaMedidasComponent,{
+      height: '60%',
+      width: '60%',
+    });
 
-ngOnInit():void{
-
-//document.getElementById(nombre_modal).style.display = 'none';
-  //  this.http.get<any[]>(this.apiUrl).subscribe(data => {
-  //     this.posts = data;
-  //   });
-   //this.getUsersApi();
- 
-}
+  }
 
 
-  constructor(@Inject(DOCUMENT) private document: Document, private apiService: ApiService, private toastService: ToastService,private fb: FormBuilder) {
+
+  ngOnInit():void{
+
+  //document.getElementById(nombre_modal).style.display = 'none';
+    //  this.http.get<any[]>(this.apiUrl).subscribe(data => {
+    //     this.posts = data;
+    //   });
+    //this.getUsersApi();
+  
+  }
+
+
+  constructor(@Inject(DOCUMENT) private document: Document, private apiService: ApiService,
+   private toastService: ToastService,private fb: FormBuilder,private shared: SharedService,  private cdr: ChangeDetectorRef,
+     private dialog: MatDialog
+) {
     // Accessing the window object
     const currentWindow = this.document.defaultView;
 
@@ -96,44 +128,44 @@ ngOnInit():void{
   
   }
 
-
- infracciones: Infracciones[] = [
-  {NroExpediente: 133242134, FechaInfraccion: new Date("2025-08-17"), Comportamiento: 'ART 146, NUM 12, LIT a, No cumplir con xxx', Estado: 'Proceso'},
-  {NroExpediente: 21234123, FechaInfraccion: new Date("2025-08-17"), Comportamiento: 'ART 146, NUM 12, LIT a, No cumplir con xxx', Estado: 'Proceso'},
-  {NroExpediente: 3123123, FechaInfraccion: new Date("2025-08-17"), Comportamiento: 'ART 146, NUM 12, LIT a, No cumplir con xxx', Estado: 'Proceso'},
-  {NroExpediente: 4132123, FechaInfraccion: new Date("2025-08-17"), Comportamiento: 'ART 146, NUM 12, LIT a, No cumplir con xxx', Estado: 'Proceso'},
-
-];
-  
- displayedColumns: string[] = ['NroExpediente', 'Fecha Infraccion', 'Comportamiento', 'Estado', 'Acciones'];
-//  dataSource = new MatTableDataSource(ELEMENT_DATA);
-
-
-  // getAllExpediente(){
-  //   this.http.get("");
-
-  // }
   buscarClick(): void {
 
-
-   const select = document.querySelector('#lista-desplegables input[type="hidden"]') as HTMLInputElement;
+  this.loading = true
+  const select = document.querySelector('#lista-desplegables input[type="hidden"]') as HTMLInputElement;
   const tipoDocumento = select ? select.value : '';
-    //this.message = 'Button clicked!';
-    this.apiService.getData(tipoDocumento,this.numeroDocumento).subscribe({
+    this.apiService.getData(tipoDocumento,this.numeroDocumento).pipe(
+        finalize(() => {
+          this.loading = false;
+           this.cdr.markForCheck();
+        })
+      )
+    .subscribe({
       next: (data)=>{
-        this.posts.set(data);
-            console.log(this.posts);
+        if(data.length!=0){
+          this.posts.set(data);
+        }else{
+          this.openAlert("No se encontraron Registros")
+        }
+        
+      },
+      error: (err) => {
+          console.log('Error:', err.status);
+          this.openAlert("Ocurrio un error inesperado").afterClosed()
+          .subscribe(result=>{
+          })
+        }
+      
+    })
+  }
+
+  openAlert(mensaje:string){
+    return this.dialog.open(AlertDialogComponent,{
+      width: '400px',
+      panelClass: 'custom-alert-dialog',
+      data:{
+        mensaje:mensaje
       }
     })
-    
-    
-    
-  
-        //  this.showToast();
-      
-
-    console.log('Button buscar was clicked!');
-      // 92545551
   }
 
 
@@ -141,11 +173,7 @@ ngOnInit():void{
   //document.getElementById('closealertcontainer').style.display = 'none';
 }
 
-openAlert() {
-  //document.getElementById('closealertcontainer').style.display = 'flex';
-  //document.getElementById('closealert').style.cssText = 'position: fixed; bottom: 23px; width: 100%; z-index: 2; display: flex;';
-}
-  
+
 
   getUsersApi() {
     // this.http.get('https://jsonplaceholder.typicode.com/users').subscribe((result: any) => {

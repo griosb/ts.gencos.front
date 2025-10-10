@@ -19,14 +19,14 @@
 
         <nav aria-label="Miga de pan predeterminada de tres niveles">
           <ul class="breadcrumb-govco">
-            <li class="breadcrumb-item-govco"><a href="#">Inicio</a></li>
-            <li class="breadcrumb-item-govco"><a href="#">Expedientes</a></li>
-            <li class="breadcrumb-item-govco active" aria-current="page">Búsqueda de Expediente</li>
+            <li class="breadcrumb-item-govco"><span class="govco-home" style="color: #3366CC;"> </span><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item-govco"><span class="govco-file-invoice-dollar" style="color: #3366CC;"></span> <a href="#">Expedientes</a></li>
+            <li class="breadcrumb-item-govco active" aria-current="page" style="color: #3366CC;"> <span class="govco-bars"></span> Búsqueda de Expediente</li>
           </ul>
         </nav>
 
         <p class="titulo-barra-accesibilidad">&nbsp;GENCOS</p>
-      
+    
       </div>
 
     </div>
@@ -42,15 +42,13 @@
       <option [value]="tipoDoc.value">{{tipoDoc.viewValue}}</option>
       }
     </select>
-
   </div>
 
 <div class="entradas-de-texto-govco">
-  <label for="input-basico-id"><strong>Número de Documento*</strong></label>
+  <label for="input-basico-id"><strong>Número de Documento *</strong></label>
   <input type="text" id="input-basico-id"  [(ngModel)]="numeroDocumento" placeholder="Número de Documento"/>
 </div>
 
-      <p class="descripcion-barra-accesibilidad">Módulo de consulta (Demo)</p>
 <!-- Botón mixto - Variante Contenido -->
 <button (click)="buscarClick()" type="button" class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco right-arrow-btn-govco" icon-position="right" style="width: 165px; height: 42px;">
   <span>Buscar</span>
@@ -61,19 +59,21 @@
 
 <br>
 
-
-<div class="contenedor-tabla">
+@if(loading){
+<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}@else {
+<div class="contenedor-tabla" style="width: 90%;">
   <h4 class="modal-title-tables" id="tableDescBasic">Resultados Consulta</h4>
-  <table class="table table-general table-basic" aria-describedby="tableDescBasic">
-    <thead class="encabezado-tabla">
+  <table class="table table-general" aria-describedby="tableDescBasic" >
+    <thead class="encabezado-tabla" >
       <tr>
-        <th scope="col">
+        <th scope="col"  >
           Nro Expediente
         </th>
         <th scope="col">
-          Fecha Infraccion
+          Fecha Infracción
         </th>
-        <th scope="col">
+        <th scope="col"  >
           Comportamiento
         </th>
         <th scope="col">
@@ -87,18 +87,34 @@
     <tbody class="contenido-tablas">   
        @for (post of posts(); track post.expediente) {  
       <tr>
-          <td class="contenido-numerico">{{ post.expediente }}</td>
-          <td>{{ post.fechaCreacionHechos }}</td>
-          <td>{{ post.cnpNum }}</td>
-          <td>{{ post.idEstado }}</td>
-          <td>
-            <a href="">Ver Medidas</a>
+          <td class="contenido-numerico" style="vertical-align: center;    width: 17%;" >{{ post.expediente }}</td>
+          <td style="vertical-align: center;">{{ post.fechaCreacionHechos | date: 'dd/MM/yyyy' }} </td>
+          <td style="vertical-align: center;" style="text-align: left;" >{{ post.cnpNum }}</td>
+          <td style="vertical-align: center;">{{ post.estado }}</td>
+          
+          <td style="vertical-align: center;">
+            @if(post.estado != "CERRADO"){
+            <button (click)="openModal(post)" matButton>Ver Medidas</button>
+            }
+            
+            // Solo el administrador
+            @if(post.fallo == null){
+            <button (click)="openModal(post)" matButton>Insertar Fallo</button>
+            }
+
+            @if(post.fallo != null){
+            <button (click)="openModal(post)" matButton>Ver Fallo</button>
+            }
+
           </td>
       </tr>
       }
     </tbody>
   </table>
 </div>
+}
+
+
 
 <div class="govco-footer">
   <div class="row govco-portales-contenedor m-0">
@@ -271,9 +287,6 @@
   </div>
 </div>
 
-
-
-
 <!-- 
 
 <h1>Posts</h1>
@@ -287,6 +300,29 @@
 </ul> -->
 
 <script>
+
+function showSpinner(show) {
+  show=true
+  const spinner = document.querySelector('.spinner-modal-govco');
+  const ariaHidden = !show;
+  const display = show ? "flex" : "none";
+  spinner.style.display = display;
+  spinner.setAttribute("aria-hidden", ariaHidden);
+
+  if(show) {
+    const backdrop = document.createElement('div');
+    backdrop.classList.add('modal-backdrop', 'fade', 'show', 'backdrop-govco');
+    document.body.appendChild(backdrop);
+  } else {
+    const element = document.querySelector('.backdrop-govco');
+    document.body.removeChild(element);
+  }
+}
+
+
+
+
+
 window.addEventListener("load", function() {
     initDropDown();
 });

@@ -1,0 +1,68 @@
+<div class="container">
+
+    <form class="fluid" [formGroup]="frmMain" >
+        <!-- Fecha Firmeza -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Fecha Firmeza *</strong></label>
+            <input type="date" id="input-basico-id"  placeholder="Fecha Firmeza" formControlName="fechaFirmeza" matInput id="fechaFirmeza" name="fechaFirmeza"/>
+        </div>
+        
+        <!-- 
+        Tipo de salario     -->
+        <label for="lista-desplegables" class="label-desplegable-govco">
+        <strong>Tipo salario</strong><span aria-required="true">*</span>
+        </label>
+        <div class="desplegable-govco" style="width:255px; height: 40px;" id="lista-desplegables" data-type="basic">
+            <select aria-invalid="false" aria-describedby="alert-id">
+            <option disabled selected>Escoger</option>
+            <option [value]="1">Salario mínimo diario</option>
+            <option [value]="2">Salario mínimo mensual</option>
+            </select>
+        </div>
+        <!-- Número de salarios -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Número de Salarios *</strong></label>
+            <input type="text" id="input-basico-id"  placeholder="Número de Salarios"/>
+        </div>
+        <!-- Nombre Inspector -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Nombre Inspector *</strong></label>
+            <input type="text" id="input-basico-id"   placeholder="Nombre Inspector"/>
+        </div>
+        <!-- Número Inspección -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Número Inspección *</strong></label>
+            <input type="text" id="input-basico-id"  placeholder="Nombre Inspector"/>
+        </div>
+        <!-- Localidad Comuna -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Localidad Comuna *</strong></label>
+            <input type="text" id="input-basico-id"   placeholder="Localidad Comuna"/>
+        </div>
+
+        <!-- Documento -->
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Documento *</strong></label>
+            <input type="file" id="input-basico-id"   placeholder="Localidad Comuna"/>
+        </div>
+        <!-- Desición     -->
+        <label for="lista-desicion" class="label-desplegable-govco">
+        <strong>Desición</strong><span aria-required="true">*</span>
+        </label>
+    
+        <div class="desplegable-govco" style="width:255px; height: 40px;" id="lista-desicion" data-type="basic">
+            <select aria-invalid="false" aria-describedby="alert-id">
+            <option disabled selected>Escoger</option>
+            <option [value]="1">Imponer</option>
+            <option [value]="2">No Imponer</option>
+            <option [value]="3">Anular</option>
+            </select>
+        </div>
+        <!-- Botón insertar -->
+    </form>
+    
+    <button (click)="insertarClick()" type="button" class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco right-arrow-btn-govco" icon-position="right" style="width: 165px; height: 42px;">
+        <span>Insertar</span>
+        </button>
+ 
+</div>

@@ -1,0 +1,93 @@
+<div class="alert-container">
+  <!-- Botón de cierre -->
+  <button mat-icon-button class="close-btn" [mat-dialog-close]="true">
+    <mat-icon>close</mat-icon>
+  </button>
+
+
+@if (step) {
+<div class="contenedor">
+    <div class="col izquierda">
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Número de Expediente</strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.expediente" disabled />
+        </div>
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Fecha</strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.fecha | date:'dd/MM/yyyy'" disabled />
+        </div>
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Tipo de Medida</strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.medidas?.at(0)?.medida" disabled />
+        </div>
+    </div>
+    <div class="col derecha">
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Comportamiento </strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.medidas?.at(0)?.comportamiento" disabled />
+        </div>
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Reiterancia</strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.medidas?.at(0)?.reincidencia" disabled />
+        </div>
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Estado</strong></label>
+            <input type="text" id="input-basico-id" [value]="medidas?.medidas?.at(0)?.estado" disabled />
+        </div>
+        <button (click)="liquidarInfraccion()" type="button" class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco right-arrow-btn-govco"
+            icon-position="right" style="width: 165px; height: 42px;">
+            <span>Siguiente</span>
+        </button>
+        <br /><br />
+    </div>
+</div>
+}
+
+@if (!step) {
+<div class="contenedor">
+    <div class="col izquierda">
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Valor Base</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.valorBase| currency:'$ ':'symbol':'1.0-0'" disabled />
+        </div>
+        @if (liquidacionMedida?.aplicaProntoPago=="SI"){
+         <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Valor Pronto Pago</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.valorProntoPago | currency:'$ ':'symbol':'1.0-0'" disabled />
+        </div>
+        }
+    
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Valor Interes</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.valorInterese | currency:'$ ':'symbol':'1.0-0'" disabled />
+        </div>
+           <!-- <button (click)="atras()" type="button" class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
+            icon-position="right" style="width: 165px; height: 42px;">
+            <span>Atras</span>
+        </button> -->
+        <br /><br />
+    </div>
+    <div class="col derecha">
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Fecha Pago Pleno</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.fechaPagoPleno | date: 'dd/MM/yyyy'" disabled />
+        </div>
+         @if (liquidacionMedida?.aplicaProntoPago=="SI"){
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Fecha Pronto Pago</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.fechaProntoPago | date: 'dd/MM/yyyy'" disabled />
+        </div>
+        }
+        <div class="entradas-de-texto-govco">
+            <label for="input-basico-id"><strong>Fecha Liquidación</strong></label>
+            <input type="text" id="input-basico-id" [value]="liquidacionMedida?.fechaLiquidacion | date: 'dd/MM/yyyy'" disabled />
+        </div>
+        <button type="button" class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco right-arrow-btn-govco"
+            icon-position="right" style="width: 165px; height: 42px;"  [mat-dialog-close]="true" (click)="pagarMedida()">
+            <span>Pagar</span>
+        </button>
+        <br /><br />
+    </div>
+</div>
+}
+</div>

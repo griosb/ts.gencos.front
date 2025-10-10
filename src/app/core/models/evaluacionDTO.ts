@@ -1,4 +1,5 @@
 export interface evaluacion {
+    idExpediente:             number;
     apelacion:                string;
     aplicaMedida:             string;
     atiendeApelacion:         string;
@@ -12,6 +13,7 @@ export interface evaluacion {
     codigoDtoDane:            string;
     idEntidadRemiteApelacion: number;
     idEstado:                 number;
+    estado:                   string;
     expediente:               string;
     fecha:                    Date;
     fechaCreacionHechos:      Date;
@@ -27,6 +29,7 @@ export interface evaluacion {
     lugar:                    string;
     personas:                 Persona[];
     medidas:                  Medida[];
+    fallo:                    Fallo;
 }
 
 export interface Medida {
@@ -39,6 +42,24 @@ export interface Medida {
     estado:         string;
     idEstado:       number;
     idHechos:       number;
+}
+
+export interface Fallo{
+    idFalloInspector:        number;  //
+    idHechos:                string;
+    idHechoMedida:           number;
+    fechaFirmeza:            Date;
+    tipoSalario:             number;
+    numeroSalarios:          number;
+    nombreInspector:         string;
+    numeroInspeccion:        number;
+    localidadComuna:         string;
+    documentoFallo:          string;
+    estado:                  string;
+    fechaCreacion:           Date;
+    desicion:                string;
+    expediente:              number;
+
 }
 
 export interface Persona {
